@@ -14,57 +14,57 @@ app.get('/', (req, res) => {
 })
 
 // GET all users
-app.get('/users', (req, res) => {
-    connection.query('SELECT * FROM users', (err, results) => {
+app.get('/books', (req, res) => {
+    connection.query('SELECT * FROM books', (err, results) => {
         if (err) return res.status(500).json({ error: err })
         res.json(results)
     })
 })
 
 // GET user by ID
-app.get('/users/:id', (req, res) => {
+app.get('/books/:id', (req, res) => {
     const id = req.params.id
-    connection.query('SELECT * FROM users WHERE id = ?', [id], (err, results) => {
+    connection.query('SELECT * FROM books WHERE id = ?', [id], (err, results) => {
         if (err) return res.status(500).json({ error: err })
         if (results.length === 0) {
-            return res.status(404).json({ message: "User not found" })
+            return res.status(404).json({ message: "books not found" })
         }
         res.json({ user: results[0] })
     })
 })
 
 // CREATE user
-app.post('/users', (req, res) => {
+app.post('/books', (req, res) => {
     const { title, author, price, avatar } = req.body
     connection.query(
-        'INSERT INTO users (title, author, price, avatar) VALUES (?, ?, ?, ?)',
+        'INSERT INTO books (title, author, price, avatar) VALUES (?, ?, ?, ?)',
         [title, author, price, avatar],
         (err, results) => {
             if (err) return res.status(500).json({ error: err })
-            res.status(201).json({ message: 'User created', id: results.insertId })
+            res.status(201).json({ message: 'books created', id: results.insertId })
         }
     )
 })
 
 // UPDATE user
-app.put('/users', (req, res) => {
+app.put('/books', (req, res) => {
     const { id, title, author, price, avatar } = req.body
     connection.query(
-        'UPDATE users SET title = ?, author = ?, price = ?, avatar = ? WHERE id = ?',
+        'UPDATE books SET title = ?, author = ?, price = ?, avatar = ? WHERE id = ?',
         [title, author, price, avatar, id],
         (err, results) => {
             if (err) return res.status(500).json({ error: err })
-            res.json({ message: 'User updated' })
+            res.json({ message: 'books updated' })
         }
     )
 })
 
 // DELETE user
-app.delete('/users', (req, res) => {
+app.delete('/books', (req, res) => {
     const { id } = req.body
-    connection.query('DELETE FROM users WHERE id = ?', [id], (err, results) => {
+    connection.query('DELETE FROM books WHERE id = ?', [id], (err, results) => {
         if (err) return res.status(500).json({ error: err })
-        res.json({ message: 'User deleted' })
+        res.json({ message: 'books deleted' })
     })
 })
 
